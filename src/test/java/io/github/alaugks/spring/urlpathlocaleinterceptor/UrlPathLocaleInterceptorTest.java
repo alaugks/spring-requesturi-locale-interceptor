@@ -64,6 +64,7 @@ class UrlPathLocaleInterceptorTest {
 
     @Test
     void test_redirectIfNotSupportedLocaleInUri_checkReturn() throws IOException {
+
         this.mockRequest.setRequestURI("/it/home");
         this.initUrlLocaleInterceptor();
 
@@ -78,16 +79,17 @@ class UrlPathLocaleInterceptorTest {
         this.mockRequest.setRequestURI("/it/home");
         this.initUrlLocaleInterceptor();
 
-        assertEquals("/en/home", this.mockedResponse.getRedirectedUrl());
+        assertEquals("http://localhost/en/home", this.mockedResponse.getRedirectedUrl());
     }
 
     @Test
     void test_redirectIfNotSupportedLocaleInUri_withQuery() throws IOException {
+
         this.mockRequest.setRequestURI("/it/home");
         this.mockRequest.setQueryString("param=value");
         this.initUrlLocaleInterceptor();
 
-        assertEquals("/en/home?param=value", this.mockedResponse.getRedirectedUrl());
+        assertEquals("http://localhost/en/home?param=value", this.mockedResponse.getRedirectedUrl());
     }
 
     @Test
@@ -95,7 +97,7 @@ class UrlPathLocaleInterceptorTest {
         this.mockRequest.setRequestURI("/it");
         this.initUrlLocaleInterceptor();
 
-        assertEquals("/en/home", this.mockedResponse.getRedirectedUrl());
+        assertEquals("http://localhost/en/home", this.mockedResponse.getRedirectedUrl());
     }
 
     @Test
@@ -104,7 +106,22 @@ class UrlPathLocaleInterceptorTest {
         this.mockRequest.setQueryString("param=value");
         this.initUrlLocaleInterceptor();
 
-        assertEquals("/en/home?param=value", this.mockedResponse.getRedirectedUrl());
+        assertEquals("http://localhost/en/home?param=value", this.mockedResponse.getRedirectedUrl());
+    }
+
+    @Test
+    void test_fullUrl() throws IOException {
+        this.mockRequest.setProtocol("https");
+        this.mockRequest.setRemoteHost("www.example.com");
+        this.mockRequest.setRemotePort(1234);
+        this.mockRequest.setRequestURI("/en/home");
+        this.mockRequest.setQueryString("param1=value1&param2=value2");
+        this.initUrlLocaleInterceptor();
+
+        assertEquals(
+            "http://www.example.com:1234/en/en/home?param1=value1&param2=value2",
+            this.mockedResponse.getRedirectedUrl()
+        );
     }
 
     public static class MockLocaleResolver implements LocaleResolver {

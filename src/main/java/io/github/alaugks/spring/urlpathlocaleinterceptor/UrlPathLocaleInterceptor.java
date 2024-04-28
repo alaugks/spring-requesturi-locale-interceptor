@@ -3,12 +3,14 @@ package io.github.alaugks.spring.urlpathlocaleinterceptor;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.support.RequestContextUtils;
+import org.springframework.web.util.UriComponentsBuilder;
 
 public class UrlPathLocaleInterceptor implements HandlerInterceptor {
 
@@ -32,8 +34,10 @@ public class UrlPathLocaleInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+
         throws IOException {
-        String[] uri = request.getRequestURI().trim().replaceAll("^/", "").split("/");
+
+        String[] uri = request.getRequestURI().split("/");
         String uriFromLocale = (0 < uri.length) ? uri[0] : null;
 
         if (uriFromLocale != null) {
@@ -58,26 +62,41 @@ public class UrlPathLocaleInterceptor implements HandlerInterceptor {
 
             String path = this.joinUriWithoutLang(uri);
 
-            String queryString = "";
-            if (request.getQueryString() != null) {
-                queryString = !request.getQueryString().isEmpty() ? "?" + request.getQueryString() : "";
-            }
+            path = !path.isEmpty()
+                ? String.format("/%s%s", this.defaultLocale.toString(), path)
+                : this.defaultHomePath;
 
-            response.sendRedirect(!path.isEmpty()
-                ? String.format("/%s%s", this.defaultLocale.toString(), path) + queryString
-                : this.defaultHomePath + queryString);
+            response.sendRedirect(this.createUri(request, path).toURL().toString());
 
             return false;
 
         }
+
         return true;
     }
 
     private String joinUriWithoutLang(String... uri) {
+
         String joinedUri = String.join(
             "/",
             Arrays.copyOfRange(uri, 1, uri.length)
         );
         return !joinedUri.isEmpty() ? "/" + joinedUri : "";
+    }
+
+    public URI createUri(final HttpServletRequest req, String path) {
+
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder
+            .newInstance()
+            .scheme(req.getScheme())
+            .host(req.getRemoteHost())
+            .path(path)
+            .query(req.getQueryString());
+
+        if (!List.of(80, 443).contains(req.getRemotePort())) {
+            uriBuilder.port(req.getRemotePort());
+        }
+
+        return uriBuilder.build().toUri();
     }
 }

@@ -33,43 +33,45 @@ public class UrlPathLocaleInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 
-        throws IOException {
+        try {
+            String[] uri = request.getRequestURI().trim().replaceAll("^/", "").split("/");
+            String uriFromLocale = (0 < uri.length) ? uri[0] : null;
 
-        String[] uri = request.getRequestURI().split("/");
-        String uriFromLocale = (0 < uri.length) ? uri[0] : null;
+            if (uriFromLocale != null) {
+                LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
 
-        if (uriFromLocale != null) {
-            LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
+                if (localeResolver == null) {
+                    throw new IllegalStateException("LocaleResolver not found");
+                }
 
-            if (localeResolver == null) {
-                throw new IllegalStateException("LocaleResolver not found");
+                Locale localeUri = Locale.forLanguageTag(uriFromLocale);
+                Locale locale;
+
+                boolean supportedLocaleExists = this.supportedLocales
+                    .stream()
+                    .anyMatch(l -> l.toString().equals(localeUri.toString()));
+
+                if (supportedLocaleExists) {
+                    locale = localeUri;
+                    localeResolver.setLocale(request, response, locale);
+                    return true;
+                }
+
+                String path = this.joinUriWithoutLang(uri);
+
+                path = !path.isEmpty()
+                    ? String.format("/%s%s", this.defaultLocale.toString(), path)
+                    : this.defaultHomePath;
+
+                response.sendRedirect(this.createUri(request, path).toURL().toString());
+
+                return false;
+
             }
-
-            Locale localeUri = Locale.forLanguageTag(uriFromLocale);
-            Locale locale;
-
-            boolean supportedLocaleExists = this.supportedLocales
-                .stream()
-                .anyMatch(l -> l.toString().equals(localeUri.toString()));
-
-            if (supportedLocaleExists) {
-                locale = localeUri;
-                localeResolver.setLocale(request, response, locale);
-                return true;
-            }
-
-            String path = this.joinUriWithoutLang(uri);
-
-            path = !path.isEmpty()
-                ? String.format("/%s%s", this.defaultLocale.toString(), path)
-                : this.defaultHomePath;
-
-            response.sendRedirect(this.createUri(request, path).toURL().toString());
-
-            return false;
-
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
         return true;

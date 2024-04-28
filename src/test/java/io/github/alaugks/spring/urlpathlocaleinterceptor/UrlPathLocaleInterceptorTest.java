@@ -114,12 +114,12 @@ class UrlPathLocaleInterceptorTest {
         this.mockRequest.setProtocol("https");
         this.mockRequest.setRemoteHost("www.example.com");
         this.mockRequest.setRemotePort(1234);
-        this.mockRequest.setRequestURI("/en/home");
+        this.mockRequest.setRequestURI("/it/home");
         this.mockRequest.setQueryString("param1=value1&param2=value2");
         this.initUrlLocaleInterceptor();
 
         assertEquals(
-            "http://www.example.com:1234/en/en/home?param1=value1&param2=value2",
+            "http://www.example.com:1234/en/home?param1=value1&param2=value2",
             this.mockedResponse.getRedirectedUrl()
         );
     }

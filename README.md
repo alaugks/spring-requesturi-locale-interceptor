@@ -14,7 +14,7 @@ An [example](https://spring-boot-xliff-example.alaugks.dev/) in action can be vi
 <dependency>
     <groupId>io.github.alaugks</groupId>
     <artifactId>spring-requesturi-locale-interceptor</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.0-SNAPSHOT</version>
 </dependency>
 ```
 

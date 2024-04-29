@@ -1,4 +1,4 @@
-package io.github.alaugks.spring.urlpathlocaleinterceptor;
+package io.github.alaugks.spring.requesturilocaleinterceptor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -17,7 +17,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.LocaleResolver;
 
-class UrlPathLocaleInterceptorTest {
+class RequestURILocaleInterceptorTest {
 
     static List<Locale> supportedLocales = new ArrayList<>() {
         {
@@ -39,7 +39,7 @@ class UrlPathLocaleInterceptorTest {
     }
 
     void initUrlLocaleInterceptor() throws IOException {
-        UrlPathLocaleInterceptor interceptor = new UrlPathLocaleInterceptor();
+        RequestURILocaleInterceptor interceptor = new RequestURILocaleInterceptor();
         interceptor.setDefaultLocale(defaultLocal);
         interceptor.setSupportedLocales(supportedLocales);
         interceptor.setDefaultHomePath("/en/home");
@@ -70,7 +70,7 @@ class UrlPathLocaleInterceptorTest {
 
         // In the case of a redirect, Request is not set for MockLocaleResolver. MockLocaleResolver.resolveLocale
         // throws a NullPointerException. This can be used to test if the response is set correctly and to abort
-        // processing in UrlPathLocaleInterceptor with a return false.
+        // processing in RequestURILocaleInterceptor with a return false.
         assertThrows(NullPointerException.class, () -> this.mockLocaleResolver.resolveLocale(this.mockRequest));
     }
 

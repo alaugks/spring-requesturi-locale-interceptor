@@ -1,18 +1,18 @@
-# UrlPath Locale Interceptor for Spring
+# RequestURI Locale Interceptor for Spring
 
 ## Dependency
 ```xml
 <dependency>
     <groupId>io.github.alaugks</groupId>
-    <artifactId>spring-url-path-locale-interceptor</artifactId>
+    <artifactId>spring-requesturi-locale-interceptor</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 </dependency>
 ```
 
 ## Configuration
 ```java
-import io.github.alaugks.spring.urlpathlocaleinterceptor.UrlPathLocaleInterceptor;
-import io.github.alaugks.spring.urlpathlocaleinterceptor.UrlPathLocaleResolver;
+import io.github.alaugks.spring.requesturilocaleinterceptor.RequestURILocaleInterceptor;
+import io.github.alaugks.spring.requesturilocaleinterceptor.RequestURILocaleResolver;
 import java.util.List;
 import java.util.Locale;
 import org.springframework.context.annotation.Bean;
@@ -34,14 +34,14 @@ public class WebMvcConfigurerConfig implements WebMvcConfigurer {
 
     @Bean
     public LocaleResolver localeResolver() {
-        UrlPathLocaleResolver resolver = new UrlPathLocaleResolver();
+        RequestURILocaleResolver resolver = new RequestURILocaleResolver();
         resolver.setDefaultLocale(this.defaultLocale);
         return resolver;
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        UrlPathLocaleInterceptor urlInterceptor = new UrlPathLocaleInterceptor();
+        RequestURILocaleInterceptor urlInterceptor = new RequestURILocaleInterceptor();
         urlInterceptor.setDefaultLocale(this.defaultLocale);
         urlInterceptor.setSupportedLocales(this.supportedLocales);
         urlInterceptor.setDefaultHomePath(

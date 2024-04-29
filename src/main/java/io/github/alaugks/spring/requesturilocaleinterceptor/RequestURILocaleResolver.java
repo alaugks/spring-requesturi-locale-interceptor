@@ -1,4 +1,4 @@
-package io.github.alaugks.spring.urlpathlocaleinterceptor;
+package io.github.alaugks.spring.requesturilocaleinterceptor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -6,9 +6,9 @@ import java.util.Locale;
 import org.springframework.context.i18n.SimpleLocaleContext;
 import org.springframework.web.servlet.i18n.AbstractLocaleResolver;
 
-public class UrlPathLocaleResolver extends AbstractLocaleResolver {
+public class RequestURILocaleResolver extends AbstractLocaleResolver {
 
-    static final String LOCALE_ATTRIBUTE = UrlPathLocaleResolver.class.getName() + ".LOCALE";
+    static final String LOCALE_ATTRIBUTE = RequestURILocaleResolver.class.getName() + ".LOCALE";
     HttpServletRequest request;
 
     @Override

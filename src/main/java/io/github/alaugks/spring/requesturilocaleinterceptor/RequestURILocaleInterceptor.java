@@ -1,4 +1,4 @@
-package io.github.alaugks.spring.urlpathlocaleinterceptor;
+package io.github.alaugks.spring.requesturilocaleinterceptor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,7 +12,7 @@ import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 
-public class UrlPathLocaleInterceptor implements HandlerInterceptor {
+public class RequestURILocaleInterceptor implements HandlerInterceptor {
 
     private Locale defaultLocale;
 
@@ -36,7 +36,8 @@ public class UrlPathLocaleInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 
         try {
-            String[] uri = request.getRequestURI().trim().replaceAll("^/", "").split("/");
+
+            String[] uri = request.getRequestURI().substring(1).split("/");
             String uriFromLocale = (0 < uri.length) ? uri[0] : null;
 
             if (uriFromLocale != null) {
@@ -71,7 +72,7 @@ public class UrlPathLocaleInterceptor implements HandlerInterceptor {
 
             }
         } catch (IOException e) {
-            throw new UrlPathLocaleInterceptorException(e);
+            throw new RequestURILocaleInterceptorException(e);
         }
 
         return true;

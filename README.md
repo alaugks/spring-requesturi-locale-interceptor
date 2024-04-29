@@ -19,6 +19,34 @@ An [example](https://spring-boot-xliff-example.alaugks.dev/) in action can be vi
 ```
 
 ## Configuration
+
+### Options
+
+<table>
+<thead>
+    <tr>
+        <th align="left">Options</th>
+        <th align="left">Description</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td align="left">setSupportedLocales(Locale locale)</td>
+        <td align="left">Default Locale and Locale fallback.</td>
+    </tr>
+    <tr>
+        <td align="left">setDefaultLocale(List<Locale> locales)</td>
+        <td align="left">List all locales that are supported.</td>
+    </tr>
+    <tr>
+        <td align="left">setDefaultHomePath(String path)</td>
+        <td align="left">If a RequestURI is not exists (empty), a redirect to the path is performed.</td>
+    </tr>
+</tbody>
+</table>
+
+### Spring Configuration
+
 ```java
 import io.github.alaugks.spring.requesturilocaleinterceptor.RequestURILocaleInterceptor;
 import io.github.alaugks.spring.requesturilocaleinterceptor.RequestURILocaleResolver;

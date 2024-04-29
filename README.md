@@ -37,7 +37,7 @@ An [example](https://spring-boot-xliff-example.alaugks.dev/) in action can be vi
         <td style="text-align: left; vertical-align: top">Yes</td>
     </tr>
     <tr>
-        <td style="text-align: left; vertical-align: top">setDefaultLocale(List<Locale> locales)</td>
+        <td style="text-align: left; vertical-align: top">setDefaultLocale(List&lt;Locale&gt; locales)</td>
         <td style="text-align: left; vertical-align: top">List all locales that are supported.</td>
         <td style="text-align: left; vertical-align: top">No</td>
     </tr>

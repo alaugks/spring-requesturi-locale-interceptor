@@ -1,11 +1,20 @@
 # RequestURI Locale Interceptor for Spring
 
+Handling Locale (i18n) as first part of RequestURI. 
+
+Example RequestURI:
+```
+/{locale}/example/path?param=value
+```
+
+An [example](https://spring-boot-xliff-example.alaugks.dev/) in action can be viewed here.
+
 ## Dependency
 ```xml
 <dependency>
     <groupId>io.github.alaugks</groupId>
     <artifactId>spring-requesturi-locale-interceptor</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.0</version>
 </dependency>
 ```
 
@@ -56,5 +65,4 @@ public class WebMvcConfigurerConfig implements WebMvcConfigurer {
             .excludePathPatterns("/static/**", "/error");
     }
 }
-
 ```

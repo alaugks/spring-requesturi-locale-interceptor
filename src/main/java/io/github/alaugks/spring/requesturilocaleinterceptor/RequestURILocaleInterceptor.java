@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -101,7 +102,15 @@ public class RequestURILocaleInterceptor implements HandlerInterceptor {
                     ? String.format("/%s%s", this.defaultLocale.toString(), path)
                     : this.defaultHomePath;
 
-                response.sendRedirect(this.createUri(request, path).toURL().toString());
+                URL url = this.createUri(request, path).toURL();
+
+                String requestURI = String.format(
+                    "%s%s",
+                    url.getPath() != null ? url.getPath() : "",
+                    url.getQuery() != null  ? url.getQuery() : ""
+                );
+
+                response.sendRedirect(requestURI);
 
                 return false;
 

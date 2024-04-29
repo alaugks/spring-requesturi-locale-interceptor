@@ -78,7 +78,7 @@ class RequestURILocaleInterceptorTest {
         this.mockRequest.setRequestURI("/it/home");
         this.initUrlLocaleInterceptor();
 
-        assertEquals("http://localhost/en/home", this.mockedResponse.getRedirectedUrl());
+        assertEquals("/en/home", this.mockedResponse.getRedirectedUrl());
     }
 
     @Test
@@ -86,7 +86,7 @@ class RequestURILocaleInterceptorTest {
         this.mockRequest.setRequestURI("/it");
         this.initUrlLocaleInterceptor();
 
-        assertEquals("http://localhost/en/home", this.mockedResponse.getRedirectedUrl());
+        assertEquals("/en/home", this.mockedResponse.getRedirectedUrl());
     }
 
     @Test
@@ -99,7 +99,7 @@ class RequestURILocaleInterceptorTest {
         this.initUrlLocaleInterceptor();
 
         assertEquals(
-            "http://www.example.com:1234/en/home?param1=value1&param2=value2",
+            "/en/homeparam1=value1&param2=value2",
             this.mockedResponse.getRedirectedUrl()
         );
     }

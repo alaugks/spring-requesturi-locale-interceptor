@@ -44,7 +44,7 @@ class RequestURILocaleInterceptorBuilderTest {
             .build();
         interceptor.preHandle(this.mockRequest, this.mockedResponse, null);
 
-        assertEquals("http://localhost/en", this.mockedResponse.getRedirectedUrl());
+        assertEquals("/en", this.mockedResponse.getRedirectedUrl());
     }
 
     @Test
@@ -56,7 +56,7 @@ class RequestURILocaleInterceptorBuilderTest {
             .build();
         interceptor.preHandle(this.mockRequest, this.mockedResponse, null);
 
-        assertEquals("http://localhost/en", this.mockedResponse.getRedirectedUrl());
+        assertEquals("/en", this.mockedResponse.getRedirectedUrl());
     }
 
     @Test

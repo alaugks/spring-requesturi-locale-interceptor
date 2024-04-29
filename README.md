@@ -84,15 +84,17 @@ public class WebMvcConfigurerConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        RequestURILocaleInterceptor urlInterceptor = new RequestURILocaleInterceptor();
-        urlInterceptor.setDefaultLocale(this.defaultLocale);
-        urlInterceptor.setSupportedLocales(this.supportedLocales);
-        urlInterceptor.setDefaultHomePath(
-            String.format(
-                "/%s/home",
-                this.defaultLocale.toString()
+        RequestURILocaleInterceptor interceptor = RequestURILocaleInterceptor
+            .builder()
+            .defaultLocale(this.defaultLocale)
+            .supportedLocales(this.supportedLocales)
+            .defaultRequestURI(
+                String.format(
+                    "/%s/home",
+                    this.defaultLocale.toString()
+                )
             )
-        );
+            .build();
 
         registry.addInterceptor(urlInterceptor)
             .addPathPatterns("/**")

@@ -71,7 +71,7 @@ public class UrlPathLocaleInterceptor implements HandlerInterceptor {
 
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new UrlPathLocaleInterceptorException(e);
         }
 
         return true;

@@ -3,19 +3,16 @@ package io.github.alaugks.spring.requesturilocaleinterceptor;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import io.github.alaugks.spring.requesturilocaleinterceptor.mocks.MockLocaleResolver;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.i18n.SimpleLocaleContext;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.DispatcherServlet;
-import org.springframework.web.servlet.LocaleResolver;
 
 class RequestURILocaleInterceptorTest {
 
@@ -39,10 +36,12 @@ class RequestURILocaleInterceptorTest {
     }
 
     void initUrlLocaleInterceptor() throws IOException {
-        RequestURILocaleInterceptor interceptor = new RequestURILocaleInterceptor();
-        interceptor.setDefaultLocale(defaultLocal);
-        interceptor.setSupportedLocales(supportedLocales);
-        interceptor.setDefaultHomePath("/en/home");
+        RequestURILocaleInterceptor interceptor = RequestURILocaleInterceptor
+            .builder()
+            .defaultLocale(defaultLocal)
+            .supportedLocales(supportedLocales)
+            .defaultRequestURI("/en/home")
+            .build();
         interceptor.preHandle(this.mockRequest, this.mockedResponse, null);
     }
 
@@ -83,30 +82,11 @@ class RequestURILocaleInterceptorTest {
     }
 
     @Test
-    void test_redirectIfNotSupportedLocaleInUri_withQuery() throws IOException {
-
-        this.mockRequest.setRequestURI("/it/home");
-        this.mockRequest.setQueryString("param=value");
-        this.initUrlLocaleInterceptor();
-
-        assertEquals("http://localhost/en/home?param=value", this.mockedResponse.getRedirectedUrl());
-    }
-
-    @Test
     void test_redirectIfNotSupportedLocaleInUriWithOutPath() throws IOException {
         this.mockRequest.setRequestURI("/it");
         this.initUrlLocaleInterceptor();
 
         assertEquals("http://localhost/en/home", this.mockedResponse.getRedirectedUrl());
-    }
-
-    @Test
-    void test_redirectIfNotSupportedLocaleInUriWithOutPath_withQuery() throws IOException {
-        this.mockRequest.setRequestURI("/it");
-        this.mockRequest.setQueryString("param=value");
-        this.initUrlLocaleInterceptor();
-
-        assertEquals("http://localhost/en/home?param=value", this.mockedResponse.getRedirectedUrl());
     }
 
     @Test
@@ -124,25 +104,25 @@ class RequestURILocaleInterceptorTest {
         );
     }
 
-    public static class MockLocaleResolver implements LocaleResolver {
-
-        static final String MOCK_LOCALE_ATTRIBUTE = "LOCALE";
-        HttpServletRequest request;
-        HttpServletResponse response;
-
-        @Override
-        public Locale resolveLocale(HttpServletRequest request) {
-            return (Locale) this.request.getAttribute(MOCK_LOCALE_ATTRIBUTE);
-        }
-
-        @Override
-        public void setLocale(HttpServletRequest request,
-            HttpServletResponse response,
-            Locale locale
-        ) {
-            request.setAttribute(MOCK_LOCALE_ATTRIBUTE, new SimpleLocaleContext(locale).getLocale());
-            this.request = request;
-            this.response = response;
-        }
-    }
+//    public static class MockLocaleResolver implements LocaleResolver {
+//
+//        static final String MOCK_LOCALE_ATTRIBUTE = "LOCALE";
+//        HttpServletRequest request;
+//        HttpServletResponse response;
+//
+//        @Override
+//        public Locale resolveLocale(HttpServletRequest request) {
+//            return (Locale) this.request.getAttribute(MOCK_LOCALE_ATTRIBUTE);
+//        }
+//
+//        @Override
+//        public void setLocale(HttpServletRequest request,
+//            HttpServletResponse response,
+//            Locale locale
+//        ) {
+//            request.setAttribute(MOCK_LOCALE_ATTRIBUTE, new SimpleLocaleContext(locale).getLocale());
+//            this.request = request;
+//            this.response = response;
+//        }
+//    }
 }

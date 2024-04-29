@@ -1,4 +1,4 @@
-package io.github.alaugks.spring.requesturilocaleinterceptor;
+package io.github.alaugks.spring.requesturilocaleinterceptor.mocks;
 
 import java.util.Locale;
 

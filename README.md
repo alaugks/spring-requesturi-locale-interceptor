@@ -25,22 +25,28 @@ An [example](https://spring-boot-xliff-example.alaugks.dev/) in action can be vi
 <table>
 <thead>
     <tr>
-        <th align="left">Options</th>
-        <th align="left">Description</th>
+        <th style="text-align: left; vertical-align: top">Options</th>
+        <th style="text-align: left; vertical-align: top">Description</th>
+        <th style="text-align: left; vertical-align: top">Required</th>
     </tr>
 </thead>
 <tbody>
     <tr>
-        <td align="left">setSupportedLocales(Locale locale)</td>
-        <td align="left">Default Locale and Locale fallback.</td>
+        <td style="text-align: left; vertical-align: top">setSupportedLocales(Locale locale)</td>
+        <td style="text-align: left; vertical-align: top">Default Locale and Locale fallback.</td>
+        <td style="text-align: left; vertical-align: top">Yes</td>
     </tr>
     <tr>
-        <td align="left">setDefaultLocale(List<Locale> locales)</td>
-        <td align="left">List all locales that are supported.</td>
+        <td style="text-align: left; vertical-align: top">setDefaultLocale(List<Locale> locales)</td>
+        <td style="text-align: left; vertical-align: top">List all locales that are supported.</td>
+        <td style="text-align: left; vertical-align: top">No</td>
     </tr>
     <tr>
-        <td align="left">setDefaultHomePath(String path)</td>
-        <td align="left">If a RequestURI is not exists (empty), a redirect to the path is performed.</td>
+        <td style="text-align: left; vertical-align: top">setDefaultHomePath(String path)</td>
+        <td style="text-align: left; vertical-align: top">If a RequestURI is not exists (empty), a redirect to the path is performed.</td>
+        <td style="text-align: left; vertical-align: top">
+            No (The default request URI /{defaultLocale} is generated.)
+        </td>
     </tr>
 </tbody>
 </table>

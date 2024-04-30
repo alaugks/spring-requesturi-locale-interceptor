@@ -9,13 +9,13 @@ import org.springframework.web.servlet.i18n.AbstractLocaleResolver;
 public class RequestURILocaleResolver extends AbstractLocaleResolver {
 
     static final String LOCALE_ATTRIBUTE = RequestURILocaleResolver.class.getName() + ".LOCALE";
-    HttpServletRequest request;
+    private HttpServletRequest request;
 
     @Override
     public Locale resolveLocale(HttpServletRequest request) {
         Object localAttribute = this.request.getAttribute(LOCALE_ATTRIBUTE);
         if (localAttribute != null) {
-            return (Locale) this.request.getAttribute(LOCALE_ATTRIBUTE);
+            return (Locale) localAttribute;
         }
 
         if (request.getLocale() != null) {

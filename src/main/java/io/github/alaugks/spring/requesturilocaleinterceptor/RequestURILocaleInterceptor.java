@@ -23,7 +23,7 @@ public class RequestURILocaleInterceptor implements HandlerInterceptor {
 
     public RequestURILocaleInterceptor(Builder builder) {
         this.defaultLocale = builder.defaultLocale;
-        this.supportedLocales =builder.supportedLocales;
+        this.supportedLocales = builder.supportedLocales;
         this.defaultHomePath = builder.defaultRequestURI;
     }
 
@@ -70,9 +70,7 @@ public class RequestURILocaleInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-
         try {
-
             String[] uri = request.getRequestURI().substring(1).split("/");
             String uriFromLocale = (0 < uri.length) ? uri[0] : null;
 
@@ -104,16 +102,13 @@ public class RequestURILocaleInterceptor implements HandlerInterceptor {
 
                 URL url = this.createUri(request, path).toURL();
 
-                String requestURI = String.format(
-                    "%s%s",
-                    url.getPath() != null ? url.getPath() : "",
-                    url.getQuery() != null  ? url.getQuery() : ""
+                // Send redirect only with path + query.
+                // No domain handling domain/ip vs. proxies and forwarded.
+                response.sendRedirect(
+                    (url.getPath() != null ? url.getPath() : "") + (url.getQuery() != null ? url.getQuery() : "")
                 );
 
-                response.sendRedirect(requestURI);
-
                 return false;
-
             }
         } catch (IOException e) {
             throw new RequestURILocaleInterceptorException(e);
@@ -128,11 +123,11 @@ public class RequestURILocaleInterceptor implements HandlerInterceptor {
             "/",
             Arrays.copyOfRange(uri, 1, uri.length)
         );
+
         return !joinedUri.isEmpty() ? "/" + joinedUri : "";
     }
 
     public URI createUri(final HttpServletRequest req, String path) {
-
         UriComponentsBuilder uriBuilder = UriComponentsBuilder
             .newInstance()
             .scheme(req.getScheme())

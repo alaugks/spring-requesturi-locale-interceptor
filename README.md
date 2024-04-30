@@ -1,12 +1,18 @@
 # RequestURI Locale Interceptor for Spring
 
-Handling Locale (i18n) as first part of RequestURI. 
+Handling Locale as first part of [RequestURI](https://jakarta.ee/specifications/servlet/6.0/apidocs/jakarta.servlet/jakarta/servlet/http/httpservletrequest#getRequestURI()). 
 
-Example RequestURI:
+Example:
 
-https://<span>www</span>.example.com**/{locale}/example/path**
+```
+HTTP Request                                           RequestURI
 
-An [example](https://spring-boot-xliff-example.alaugks.dev/) in action can see here.
+https://foo.bar/{locale}/some/path.html     ->         /{locale}/some/path.html
+https://foo.bar/{locale}/a.html             ->         /{locale}/a.html
+https://foo.bar/{locale}/xyz?a=b            ->         /{locale}/xyz
+```
+
+An example in action can be seen [here](https://spring-boot-xliff-example.alaugks.dev/).
 
 ## Dependency
 

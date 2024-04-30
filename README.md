@@ -14,6 +14,11 @@ https://foo.bar/{locale}/xyz?a=b            ->         /{locale}/xyz
 
 An example in action can be seen [here](https://spring-boot-xliff-example.alaugks.dev/).
 
+
+<br>
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=alaugks_spring-url-path-locale-interceptor&metric=alert_status)](https://sonarcloud.io/summary/overall?id=alaugks_spring-url-path-locale-interceptor) [![Maven Central](https://img.shields.io/maven-central/v/io.github.alaugks/spring-requesturi-locale-interceptor.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.alaugks/spring-requesturi-locale-interceptor/0.1.0)
+
 ## Dependency
 
 ### Maven

@@ -1,22 +1,38 @@
 # RequestURI Locale Interceptor for Spring
 
-Handling Locale (i18n) as first part of RequestURI. 
+Handling Locale as first part of [RequestURI](https://jakarta.ee/specifications/servlet/6.0/apidocs/jakarta.servlet/jakarta/servlet/http/httpservletrequest#getRequestURI()). 
 
-Example RequestURI:
+Example:
+
 ```
-/{locale}/example/path?param=value
+HTTP Request                                           RequestURI
+
+https://foo.bar/{locale}/some/path.html     ->         /{locale}/some/path.html
+https://foo.bar/{locale}/a.html             ->         /{locale}/a.html
+https://foo.bar/{locale}/xyz?a=b            ->         /{locale}/xyz
 ```
 
-An [example](https://spring-boot-xliff-example.alaugks.dev/) in action can be viewed here.
+An example in action can be seen [here](https://spring-boot-xliff-example.alaugks.dev/).
 
 ## Dependency
+
+### Maven
+
 ```xml
 <dependency>
     <groupId>io.github.alaugks</groupId>
     <artifactId>spring-requesturi-locale-interceptor</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.1.0</version>
 </dependency>
 ```
+
+### Gradle
+
+```
+implementation group: 'io.github.alaugks', name: 'spring-requesturi-locale-interceptor', version: '0.1.0'
+```
+
+
 
 ## Configuration
 
@@ -25,27 +41,43 @@ An [example](https://spring-boot-xliff-example.alaugks.dev/) in action can be vi
 <table>
 <thead>
     <tr>
-        <th style="text-align: left; vertical-align: top">Options</th>
-        <th style="text-align: left; vertical-align: top">Description</th>
-        <th style="text-align: left; vertical-align: top">Required</th>
+        <th>Options</th>
+        <th>Description</th>
+        <th>Required</th>
     </tr>
 </thead>
 <tbody>
     <tr>
-        <td style="text-align: left; vertical-align: top">setSupportedLocales(Locale locale)</td>
-        <td style="text-align: left; vertical-align: top">Default Locale and Locale fallback.</td>
-        <td style="text-align: left; vertical-align: top">Yes</td>
+        <td>
+            defaultLocale(Locale locale)
+        </td>
+        <td>
+            Default and fallback Locale and Locale.
+        </td>
+        <td>
+            Yes
+        </td>
     </tr>
     <tr>
-        <td style="text-align: left; vertical-align: top">setDefaultLocale(List&lt;Locale&gt; locales)</td>
-        <td style="text-align: left; vertical-align: top">List all locales that are supported.</td>
-        <td style="text-align: left; vertical-align: top">No</td>
+        <td>
+            supportedLocales(List&lt;Locale&gt; locales)
+        </td>
+        <td>
+            List all locales that are supported.
+        </td>
+        <td>
+            No
+        </td>
     </tr>
     <tr>
-        <td style="text-align: left; vertical-align: top">setDefaultHomePath(String path)</td>
-        <td style="text-align: left; vertical-align: top">If a RequestURI is not exists (empty), a redirect to the path is performed.</td>
-        <td style="text-align: left; vertical-align: top">
-            No (The default request URI /{defaultLocale} is generated.)
+        <td>
+            defaultRequestURI(String path)
+        </td>
+        <td>
+            If the RequestURI is empty, a redirect to the path is performed.
+        </td>
+        <td>
+            No (If not set the default RequestURI is /{defaultLocale}.)
         </td>
     </tr>
 </tbody>

@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import io.github.alaugks.spring.requesturilocaleinterceptor.mocks.MockLocaleResolver;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -19,10 +18,10 @@ class RequestURILocaleInterceptorTest {
     static List<Locale> supportedLocales = new ArrayList<>() {
         {
             add(Locale.forLanguageTag("en"));
+            add(Locale.forLanguageTag("en-US"));
             add(Locale.forLanguageTag("de"));
         }
     };
-    static Locale defaultLocal = Locale.forLanguageTag("en");
     MockHttpServletRequest mockRequest;
     MockHttpServletResponse mockedResponse;
     MockLocaleResolver mockLocaleResolver;
@@ -35,10 +34,10 @@ class RequestURILocaleInterceptorTest {
         this.mockedResponse = new MockHttpServletResponse();
     }
 
-    void initUrlLocaleInterceptor() throws IOException {
+    void initUrlLocaleInterceptor(Locale defaultLocale) {
         RequestURILocaleInterceptor interceptor = RequestURILocaleInterceptor
             .builder()
-            .defaultLocale(defaultLocal)
+            .defaultLocale(defaultLocale)
             .supportedLocales(supportedLocales)
             .defaultRequestURI("/en/home")
             .build();
@@ -46,25 +45,25 @@ class RequestURILocaleInterceptorTest {
     }
 
     @Test
-    void test_uriDePath() throws IOException {
+    void test_uriDePath() {
         this.mockRequest.setRequestURI("/de/home");
-        this.initUrlLocaleInterceptor();
+        this.initUrlLocaleInterceptor(Locale.forLanguageTag("en"));
 
         assertEquals("de", this.mockLocaleResolver.resolveLocale(this.mockRequest).getLanguage());
     }
 
     @Test
-    void test_uriEnPath() throws IOException {
+    void test_uriEnPath() {
         this.mockRequest.setRequestURI("/en/home");
-        this.initUrlLocaleInterceptor();
+        this.initUrlLocaleInterceptor(Locale.forLanguageTag("en"));
 
         assertEquals("en", this.mockLocaleResolver.resolveLocale(this.mockRequest).getLanguage());
     }
 
     @Test
-    void test_redirectIfNotSupportedLocaleInUri_checkReturn() throws IOException {
+    void test_redirectIfNotSupportedLocaleInUri_checkReturn() {
         this.mockRequest.setRequestURI("/it/home");
-        this.initUrlLocaleInterceptor();
+        this.initUrlLocaleInterceptor(Locale.forLanguageTag("en"));
 
         // In the case of a redirect, Request is not set for MockLocaleResolver. MockLocaleResolver.resolveLocale
         // throws a NullPointerException. This can be used to test if the response is set correctly and to abort
@@ -73,29 +72,37 @@ class RequestURILocaleInterceptorTest {
     }
 
     @Test
-    void test_redirectIfNotSupportedLocaleInUri() throws IOException {
+    void test_redirectIfNotSupportedLocaleDefaultLocale() {
         this.mockRequest.setRequestURI("/it/home");
-        this.initUrlLocaleInterceptor();
+        this.initUrlLocaleInterceptor(Locale.forLanguageTag("en"));
 
         assertEquals("/en/home", this.mockedResponse.getRedirectedUrl());
     }
 
     @Test
-    void test_redirectIfNotSupportedLocaleInUriWithOutPath() throws IOException {
+    void test_redirectIfNotSupportedLocaleDefaultLocaleAndRegion() {
+        this.mockRequest.setRequestURI("/it/home");
+        this.initUrlLocaleInterceptor(Locale.forLanguageTag("en-us"));
+
+        assertEquals("/en-us/home", this.mockedResponse.getRedirectedUrl());
+    }
+
+    @Test
+    void test_redirectIfNotSupportedLocaleInUriWithOutPath() {
         this.mockRequest.setRequestURI("/it");
-        this.initUrlLocaleInterceptor();
+        this.initUrlLocaleInterceptor(Locale.forLanguageTag("en"));
 
         assertEquals("/en/home", this.mockedResponse.getRedirectedUrl());
     }
 
     @Test
-    void test_fullUrl() throws IOException {
+    void test_fullUrl() {
         this.mockRequest.setProtocol("https");
         this.mockRequest.setRemoteHost("www.example.com");
         this.mockRequest.setRemotePort(1234);
         this.mockRequest.setRequestURI("/it/home");
         this.mockRequest.setQueryString("param1=value1&param2=value2");
-        this.initUrlLocaleInterceptor();
+        this.initUrlLocaleInterceptor(Locale.forLanguageTag("en"));
 
         assertEquals(
             "/en/homeparam1=value1&param2=value2",

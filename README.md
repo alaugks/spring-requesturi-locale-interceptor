@@ -17,7 +17,7 @@ An example in action can be seen [here](https://spring-boot-xliff-example.alaugk
 
 <br>
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=alaugks_spring-url-path-locale-interceptor&metric=alert_status)](https://sonarcloud.io/summary/overall?id=alaugks_spring-url-path-locale-interceptor) [![Maven Central](https://img.shields.io/maven-central/v/io.github.alaugks/spring-requesturi-locale-interceptor.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.alaugks/spring-requesturi-locale-interceptor/0.1.0)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=alaugks_spring-url-path-locale-interceptor&metric=alert_status)](https://sonarcloud.io/summary/overall?id=alaugks_spring-url-path-locale-interceptor) [![Maven Central](https://img.shields.io/maven-central/v/io.github.alaugks/spring-requesturi-locale-interceptor.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.alaugks/spring-requesturi-locale-interceptor/0.1.1)
 
 ## Dependency
 
@@ -27,14 +27,14 @@ An example in action can be seen [here](https://spring-boot-xliff-example.alaugk
 <dependency>
     <groupId>io.github.alaugks</groupId>
     <artifactId>spring-requesturi-locale-interceptor</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```
-implementation group: 'io.github.alaugks', name: 'spring-requesturi-locale-interceptor', version: '0.1.0'
+implementation group: 'io.github.alaugks', name: 'spring-requesturi-locale-interceptor', version: '0.1.1'
 ```
 
 

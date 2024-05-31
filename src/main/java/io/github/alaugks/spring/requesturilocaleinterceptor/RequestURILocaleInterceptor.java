@@ -97,7 +97,7 @@ public class RequestURILocaleInterceptor implements HandlerInterceptor {
                 String path = this.joinUriWithoutLang(uri);
 
                 path = !path.isEmpty()
-                    ? String.format("/%s%s", this.defaultLocale.toString(), path)
+                    ? String.format("/%s%s", this.defaultLocale.toString().toLowerCase().replace("_", "-"), path)
                     : this.defaultHomePath;
 
                 URL url = this.createUri(request, path).toURL();

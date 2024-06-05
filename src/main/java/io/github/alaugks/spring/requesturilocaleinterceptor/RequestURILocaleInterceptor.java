@@ -2,7 +2,6 @@ package io.github.alaugks.spring.requesturilocaleinterceptor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
@@ -91,49 +90,46 @@ public class RequestURILocaleInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         try {
             String[] uri = request.getRequestURI().substring(1).split("/");
-            String uriFromLocale = (0 < uri.length) ? uri[0] : null;
+            String uriFromLocale = uri[0];
 
-            if (uriFromLocale != null) {
-                LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
+            LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
 
-                if (localeResolver == null) {
-                    throw new IllegalStateException("LocaleResolver not found");
-                }
-
-                Locale localeUri = Locale.forLanguageTag(uriFromLocale);
-                Locale locale;
-
-                boolean supportedLocaleExists = this.supportedLocales
-                    .stream()
-                    .anyMatch(l -> l.toString().equals(localeUri.toString()));
-
-                if (supportedLocaleExists) {
-                    locale = localeUri;
-                    localeResolver.setLocale(request, response, locale);
-                    return true;
-                }
-
-                String path = this.joinUriWithoutLang(uri);
-
-                path = !path.isEmpty()
-                    ? String.format("/%s%s", this.defaultLocale.toString().toLowerCase().replace("_", "-"), path)
-                    : this.defaultHomePath;
-
-                URL url = this.createUri(request, path).toURL();
-
-                // Send redirect only with path + query.
-                // No domain handling domain/ip vs. proxies and forwarded.
-                response.sendRedirect(
-                    (url.getPath() != null ? url.getPath() : "") + (url.getQuery() != null ? url.getQuery() : "")
-                );
-
-                return false;
+            if (localeResolver == null) {
+                throw new IllegalStateException("LocaleResolver not found");
             }
-        } catch (IOException e) {
+
+            Locale localeUri = Locale.forLanguageTag(uriFromLocale);
+            Locale locale;
+
+            boolean supportedLocaleExists = this.supportedLocales
+                .stream()
+                .anyMatch(l -> l.toString().equals(localeUri.toString()));
+
+            if (supportedLocaleExists) {
+                locale = localeUri;
+                localeResolver.setLocale(request, response, locale);
+                return true;
+            }
+
+            String path = this.joinUriWithoutLang(uri);
+
+            path = !path.isEmpty()
+                ? String.format("/%s%s", this.defaultLocale.toString().toLowerCase().replace("_", "-"), path)
+                : this.defaultHomePath;
+
+            URL url = this.createUri(request, path).toURL();
+
+            // Send redirect only with path + query.
+            // No domain handling domain/ip vs. proxies and forwarded.
+            response.sendRedirect(
+                (url.getPath() != null ? url.getPath() : "") + (url.getQuery() != null ? url.getQuery() : "")
+            );
+
+            return false;
+
+        } catch (Exception e) {
             throw new RequestURILocaleInterceptorException(e);
         }
-
-        return true;
     }
 
     private String joinUriWithoutLang(String... uri) {

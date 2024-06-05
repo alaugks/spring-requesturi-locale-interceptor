@@ -1,6 +1,7 @@
 package io.github.alaugks.spring.requesturilocaleinterceptor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import io.github.alaugks.spring.requesturilocaleinterceptor.mocks.MockLocaleResolver;
@@ -108,5 +109,32 @@ class RequestURILocaleInterceptorTest {
             "/en/homeparam1=value1&param2=value2",
             this.mockedResponse.getRedirectedUrl()
         );
+    }
+
+    @Test
+    void test_throw_RequestURILocaleInterceptorException() {
+        RequestURILocaleInterceptor interceptor = RequestURILocaleInterceptor
+            .builder(Locale.forLanguageTag("en"))
+            .build();
+
+        assertThrows(
+            RequestURILocaleInterceptorException.class,
+            () -> interceptor.preHandle(this.mockRequest, this.mockedResponse, null)
+        );
+    }
+
+    @Test
+    void test_throw_getLocaleResolver_Exception() {
+        this.mockRequest.setRequestURI("/");
+        this.mockRequest.removeAttribute(DispatcherServlet.LOCALE_RESOLVER_ATTRIBUTE);
+        RequestURILocaleInterceptor interceptor = RequestURILocaleInterceptor
+            .builder(Locale.forLanguageTag("en"))
+            .build();
+
+        var e = assertThrows(
+            RequestURILocaleInterceptorException.class,
+            () -> interceptor.preHandle(this.mockRequest, this.mockedResponse, null)
+        );
+        assertInstanceOf(IllegalStateException.class, e.getCause());
     }
 }

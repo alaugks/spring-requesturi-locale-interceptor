@@ -27,38 +27,18 @@ public class RequestURILocaleInterceptor implements HandlerInterceptor {
         this.defaultHomePath = builder.defaultRequestURI;
     }
 
-    /**
-     * @deprecated
-     */
-    @Deprecated(since = "0.3.0")
-    public static Builder builder() {
-        return new Builder();
-    }
-
     public static Builder builder(Locale defaultLocale) {
         return new Builder(defaultLocale);
     }
 
     public static final class Builder {
 
-        private Locale defaultLocale;
+        private final Locale defaultLocale;
         private List<Locale> supportedLocales;
         private String defaultRequestURI;
 
-        public Builder() {
-        }
-
         public Builder(Locale defaultLocale) {
             this.defaultLocale = defaultLocale;
-        }
-
-        /**
-         * @deprecated
-         */
-        @Deprecated(since = "0.3.0")
-        public Builder defaultLocale(Locale defaultLocale) {
-            this.defaultLocale = defaultLocale;
-            return this;
         }
 
         public Builder supportedLocales(List<Locale> supportedLocales) {

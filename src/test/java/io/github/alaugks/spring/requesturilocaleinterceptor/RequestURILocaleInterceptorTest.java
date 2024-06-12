@@ -37,8 +37,7 @@ class RequestURILocaleInterceptorTest {
 
     void initUrlLocaleInterceptor(Locale defaultLocale) {
         RequestURILocaleInterceptor interceptor = RequestURILocaleInterceptor
-            .builder()
-            .defaultLocale(defaultLocale)
+            .builder(defaultLocale)
             .supportedLocales(supportedLocales)
             .defaultRequestURI("/en/home")
             .build();

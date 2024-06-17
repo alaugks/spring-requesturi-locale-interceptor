@@ -54,10 +54,10 @@ implementation group: 'io.github.alaugks', name: 'spring-requesturi-locale-inter
 <tbody>
     <tr>
         <td>
-            defaultLocale(Locale locale)
+            builder(Locale defaultLocale)
         </td>
         <td>
-            Default and fallback Locale and Locale.
+            Default and fallback Locale.
         </td>
         <td>
             Yes

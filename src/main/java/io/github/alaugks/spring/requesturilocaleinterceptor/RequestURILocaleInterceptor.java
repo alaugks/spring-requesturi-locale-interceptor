@@ -19,7 +19,7 @@ public class RequestURILocaleInterceptor implements HandlerInterceptor {
     private static final String PATH_DELIMITER = "/";
     private final Locale defaultLocale;
     private final List<Locale> supportedLocales;
-    private final String defaultHomePath;
+    private String defaultHomePath;
 
     public RequestURILocaleInterceptor(Builder builder) {
         this.defaultLocale = builder.defaultLocale;
@@ -59,10 +59,6 @@ public class RequestURILocaleInterceptor implements HandlerInterceptor {
                 this.supportedLocales = new ArrayList<>();
             }
 
-            if (this.defaultRequestURI == null) {
-                this.defaultRequestURI = PATH_DELIMITER + this.defaultLocale;
-            }
-
             return new RequestURILocaleInterceptor(this);
         }
     }
@@ -70,13 +66,26 @@ public class RequestURILocaleInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         try {
-            String[] explodedRequestUri = request.getRequestURI().substring(1).split(PATH_DELIMITER);
-
             LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
-
             if (localeResolver == null) {
                 throw new IllegalStateException("LocaleResolver not found");
             }
+
+            if (this.defaultHomePath == null) {
+                this.defaultHomePath = PATH_DELIMITER + this.formatLocale(this.defaultLocale);
+            }
+
+            // Remove Leading Slash
+            String requestUri = request.getRequestURI().substring(1);
+
+            // Remove Trailing Slash
+            String trailingSlash = "";
+            if (requestUri.endsWith(PATH_DELIMITER)) {
+                requestUri = requestUri.substring(0, requestUri.length() - 1);
+                trailingSlash = PATH_DELIMITER;
+            }
+
+            String[] explodedRequestUri = requestUri.split(PATH_DELIMITER);
 
             Locale localeUri = Locale.forLanguageTag(explodedRequestUri[0]);
 
@@ -89,12 +98,12 @@ public class RequestURILocaleInterceptor implements HandlerInterceptor {
                 return true;
             }
 
-            URL url = this.createUri(request, this.joinUri(explodedRequestUri)).toURL();
+            URL url = this.createUri(request, this.joinUri(explodedRequestUri, trailingSlash)).toURL();
 
             // Send redirect only with path + query.
             // No domain handling domain/ip vs. proxies and forwarded.
             response.sendRedirect(
-                url.getPath() + (url.getQuery() != null ? url.getQuery() : "")
+                url.getPath() + (url.getQuery() != null ? "?" + url.getQuery() : "")
             );
 
             return false;
@@ -104,7 +113,7 @@ public class RequestURILocaleInterceptor implements HandlerInterceptor {
         }
     }
 
-    private String joinUri(String... uri) {
+    private String joinUri(String[] uri, String trailingSlash) {
         String joinedUri = String.join(
             PATH_DELIMITER,
             Arrays.copyOfRange(uri, 1, uri.length)
@@ -112,7 +121,7 @@ public class RequestURILocaleInterceptor implements HandlerInterceptor {
 
         String path = !joinedUri.isEmpty() ? PATH_DELIMITER + joinedUri : "";
         return !path.isEmpty()
-            ? PATH_DELIMITER + this.formatLocale(this.defaultLocale) + path
+            ? PATH_DELIMITER + this.formatLocale(this.defaultLocale) + path + trailingSlash
             : String.format(this.defaultHomePath, this.formatLocale(this.defaultLocale));
     }
 

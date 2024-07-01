@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>io.github.alaugks</groupId>
-  <artifactId>Package: spring-requesturi-locale-interceptor</artifactId>
+  <artifactId>spring-requesturi-locale-interceptor</artifactId>
   <version>0.3.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 

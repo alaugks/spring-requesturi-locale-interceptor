@@ -5,11 +5,11 @@ Handling Locale as first part of [RequestURI](https://jakarta.ee/specifications/
 Example:
 
 ```
-HTTP Request                                           RequestURI
+HTTP Request                                RequestURI
 
-https://foo.bar/{locale}/some/path.html     ->         /{locale}/some/path.html
-https://foo.bar/{locale}/a.html             ->         /{locale}/a.html
-https://foo.bar/{locale}/xyz?a=b            ->         /{locale}/xyz
+https://foo.bar/{locale}/some/path.html ->  /{locale}/some/path.html
+https://foo.bar/{locale}/a.html         ->  /{locale}/a.html
+https://foo.bar/{locale}/xyz?a=b        ->  /{locale}/xyz
 ```
 
 An example in action can be seen [here](https://spring-boot-xliff-example.alaugks.dev/).
@@ -19,6 +19,7 @@ An example in action can be seen [here](https://spring-boot-xliff-example.alaugk
 
 | Version | Description                                                                                                               |
 |:--------|:--------------------------------------------------------------------------------------------------------------------------|
+| 0.3.0   | [Release notes](https://github.com/alaugks/spring-requesturi-locale-interceptor/releases/tag/0.3.0)                       |
 | 0.2.0   | [Release notes](https://github.com/alaugks/spring-requesturi-locale-interceptor/releases/tag/0.2.0) / **Breaking Change** |
 | 0.1.0   | [Release notes](https://github.com/alaugks/spring-requesturi-locale-interceptor/releases/tag/0.1.0)                       |
 
@@ -32,14 +33,14 @@ An example in action can be seen [here](https://spring-boot-xliff-example.alaugk
 <dependency>
     <groupId>io.github.alaugks</groupId>
     <artifactId>spring-requesturi-locale-interceptor</artifactId>
-    <version>0.2.0</version>
+    <version>0.3.0</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```
-implementation group: 'io.github.alaugks', name: 'spring-requesturi-locale-interceptor', version: '0.2.0'
+implementation group: 'io.github.alaugks', name: 'spring-requesturi-locale-interceptor', version: '0.3.0'
 ```
 
 
@@ -129,17 +130,12 @@ public class WebMvcConfigurerConfig implements WebMvcConfigurer {
         RequestURILocaleInterceptor interceptor = RequestURILocaleInterceptor
             .builder(this.defaultLocale)
             .supportedLocales(this.supportedLocales)
-            .defaultRequestURI(
-                String.format(
-                    "/%s/home",
-                    this.defaultLocale.toString()
-                )
-            )
+            .defaultRequestURI("/en/home")
             .build();
-
-        // Exclude from Interceptor
+        
         registry.addInterceptor(urlInterceptor)
             .addPathPatterns("/**")
+            // Exclude from Interceptor
             .excludePathPatterns("/static/**", "/error");
     }
 }

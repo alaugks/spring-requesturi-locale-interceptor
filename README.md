@@ -1,5 +1,7 @@
 # RequestURI Locale Interceptor for Spring
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=alaugks_spring-url-path-locale-interceptor&metric=alert_status)](https://sonarcloud.io/summary/overall?id=alaugks_spring-url-path-locale-interceptor) [![Maven Central](https://img.shields.io/maven-central/v/io.github.alaugks/spring-requesturi-locale-interceptor.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.alaugks/spring-requesturi-locale-interceptor/0.3.0)
+
 Handling Locale as first part of [RequestURI](https://jakarta.ee/specifications/servlet/6.0/apidocs/jakarta.servlet/jakarta/servlet/http/httpservletrequest#getRequestURI()). 
 
 Example:
@@ -13,17 +15,6 @@ https://foo.bar/{locale}/xyz?a=b         ->  /{locale}/xyz
 ```
 
 An example in action can be seen [here](https://spring-boot-xliff-example.alaugks.dev/).
-
-
-## Versions
-
-| Version | Description                                                                                                               |
-|:--------|:--------------------------------------------------------------------------------------------------------------------------|
-| 0.3.0   | [Release notes](https://github.com/alaugks/spring-requesturi-locale-interceptor/releases/tag/0.3.0)                       |
-| 0.2.0   | [Release notes](https://github.com/alaugks/spring-requesturi-locale-interceptor/releases/tag/0.2.0) / **Breaking Change** |
-| 0.1.0   | [Release notes](https://github.com/alaugks/spring-requesturi-locale-interceptor/releases/tag/0.1.0)                       |
-
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=alaugks_spring-url-path-locale-interceptor&metric=alert_status)](https://sonarcloud.io/summary/overall?id=alaugks_spring-url-path-locale-interceptor) [![Maven Central](https://img.shields.io/maven-central/v/io.github.alaugks/spring-requesturi-locale-interceptor.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.alaugks/spring-requesturi-locale-interceptor/0.3.0)
 
 ## Dependency
 

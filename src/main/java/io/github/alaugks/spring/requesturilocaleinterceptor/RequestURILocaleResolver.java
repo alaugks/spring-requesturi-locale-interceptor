@@ -43,6 +43,10 @@ public class RequestURILocaleResolver extends AbstractLocaleResolver {
             return request.getLocale();
         }
 
+        // Theoretically reachable only: per Servlet spec HttpServletRequest#getLocale()
+        // never returns null — it returns the server's default Locale when the request
+        // has no Accept-Language header. Additionally, a properly configured
+        // RequestURILocaleResolver has setDefaultLocale(...) set.
         return this.getDefaultLocale();
     }
 

@@ -7,6 +7,7 @@ import java.util.Locale;
 
 public class MockHttpServletRequest extends org.springframework.mock.web.MockHttpServletRequest {
 
+    @Override
     public Locale getLocale() {
         return Locale.forLanguageTag("");
     }

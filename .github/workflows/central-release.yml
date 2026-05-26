@@ -1,0 +1,37 @@
+name: "Central Release"
+run-name: Central Release [${{ github.ref_name }}]
+on:
+  workflow_dispatch:
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup Java
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
+        with:
+          distribution: 'temurin'
+          java-package: 'jdk'
+          java-version: '17'
+          check-latest: true
+          server-id: 'central'
+          server-username: 'CENTRAL_USERNAME'
+          server-password: 'CENTRAL_TOKEN'
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg-passphrase: 'GPG_PRIVATE_KEY_PASSPHRASE'
+          cache: 'maven'
+
+      - name: Run Tests
+        run: |
+          mvn test
+
+      - name: Build & Deploy
+        run: |
+          mvn -U -B clean deploy -P release
+        env:
+          GPG_PRIVATE_KEY_PASSPHRASE: ${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}
+          CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
+          CENTRAL_TOKEN: ${{ secrets.CENTRAL_TOKEN }}

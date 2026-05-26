@@ -1,6 +1,7 @@
 # RequestURI Locale Interceptor for Spring
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=alaugks_spring-url-path-locale-interceptor&metric=alert_status)](https://sonarcloud.io/summary/overall?id=alaugks_spring-url-path-locale-interceptor) [![Maven Central](https://img.shields.io/maven-central/v/io.github.alaugks/spring-requesturi-locale-interceptor.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.alaugks/spring-requesturi-locale-interceptor/0.3.0)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=alaugks_spring-requesturi-locale-interceptor&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=alaugks_spring-requesturi-locale-interceptor)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.alaugks/spring-requesturi-locale-interceptor.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.alaugks/spring-requesturi-locale-interceptor/0.3.0)
 
 Handling Locale as first part of [RequestURI](https://jakarta.ee/specifications/servlet/6.0/apidocs/jakarta.servlet/jakarta/servlet/http/httpservletrequest#getRequestURI()). 
 
@@ -34,56 +35,16 @@ An example in action can be seen [here](https://spring-boot-xliff-example.alaugk
 implementation group: 'io.github.alaugks', name: 'spring-requesturi-locale-interceptor', version: '0.3.0'
 ```
 
-
-
 ## Configuration
 
-### Options
+`builder(Locale defaultLocale)` (***required***)
+* Argument `Locale defaultLocale`: Defines the default and fallback locale.
 
-<table>
-<thead>
-    <tr>
-        <th>Options</th>
-        <th>Description</th>
-        <th>Required</th>
-    </tr>
-</thead>
-<tbody>
-    <tr>
-        <td>
-            builder(Locale defaultLocale)
-        </td>
-        <td>
-            Default and fallback Locale.
-        </td>
-        <td>
-            Yes
-        </td>
-    </tr>
-    <tr>
-        <td>
-            supportedLocales(List&lt;Locale&gt; locales)
-        </td>
-        <td>
-            List all locales that are supported.
-        </td>
-        <td>
-            No
-        </td>
-    </tr>
-    <tr>
-        <td>
-            defaultRequestURI(String path)
-        </td>
-        <td>
-            If the RequestURI is empty, a redirect to the path is performed.
-        </td>
-        <td>
-            No (If not set the default RequestURI is /{defaultLocale}.)
-        </td>
-    </tr>
-</tbody>
-</table>
+`supportedLocales(List<Locale> locales)`
+* Lists all locales that are supported.
+
+`defaultRequestURI(String path)`
+* Defines the path to redirect to if the RequestURI is empty. If not set, the default RequestURI is `/{defaultLocale}`.
 
 ### Spring Configuration
 

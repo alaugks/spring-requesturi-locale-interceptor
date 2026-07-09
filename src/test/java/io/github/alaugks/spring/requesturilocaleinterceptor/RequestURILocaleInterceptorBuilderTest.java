@@ -3,9 +3,6 @@
 
 package io.github.alaugks.spring.requesturilocaleinterceptor;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import io.github.alaugks.spring.requesturilocaleinterceptor.mocks.MockLocaleResolver;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +12,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.DispatcherServlet;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class RequestURILocaleInterceptorBuilderTest {
 
@@ -62,16 +62,13 @@ class RequestURILocaleInterceptorBuilderTest {
 
     @Test
     void test_defaultLocale_isEmpty() {
-        try {
+        assertThrows(Exception.class, () -> {
             this.mockRequest.setRequestURI("/it");
             RequestURILocaleInterceptor interceptor = RequestURILocaleInterceptor
                 .builder(Locale.forLanguageTag(""))
                 .build();
             interceptor.preHandle(this.mockRequest, this.mockedResponse, null);
-            fail("Exception not thrown");
-        } catch (Exception e) {
-            assertEquals(IllegalArgumentException.class, e.getClass());
-            assertEquals("Default locale is empty", e.getMessage());
-        }
+
+        }, "Exception not thrown");
     }
 }

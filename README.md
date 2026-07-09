@@ -15,8 +15,6 @@ https://foo.bar/{locale}/a.html          ->  /{locale}/a.html
 https://foo.bar/{locale}/xyz?a=b         ->  /{locale}/xyz
 ```
 
-An example in action can be seen [here](https://spring-boot-xliff-example.alaugks.dev/).
-
 ## Dependency
 
 ### Maven
@@ -92,3 +90,10 @@ public class WebMvcConfigurerConfig implements WebMvcConfigurer {
     }
 }
 ```
+
+## Example
+
+A complete, runnable Spring Boot application is available in the
+[spring-messagesource-xliff-example](https://github.com/alaugks/spring-messagesource-xliff-example) repository.
+It shows this interceptor in action, resolving the locale from the first path segment of the request URI
+(e.g. `/en/...`, `/de/...`).

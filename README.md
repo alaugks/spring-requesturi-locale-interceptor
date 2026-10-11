@@ -7,13 +7,31 @@ Handling Locale as first part of [RequestURI](https://jakarta.ee/specifications/
 
 Example:
 
-```
-HTTP Request                                 RequestURI
+| HTTP Request                              | RequestURI                 |
+|-------------------------------------------|----------------------------|
+| `https://foo.bar/{locale}/some/path.html` | `/{locale}/some/path.html` |
+| `https://foo.bar/{locale}/a.html`         | `/{locale}/a.html`         |
+| `https://foo.bar/{locale}/xyz?a=b`        | `/{locale}/xyz`            |
 
-https://foo.bar/{locale}/some/path.html  ->  /{locale}/some/path.html
-https://foo.bar/{locale}/a.html          ->  /{locale}/a.html
-https://foo.bar/{locale}/xyz?a=b         ->  /{locale}/xyz
-```
+## Locale Resolution
+
+The first path segment of the RequestURI determines the `java.util.Locale` that Spring uses for the request
+(e.g. `LocaleContextHolder.getLocale()`, `MessageSource`, `RequestContextUtils.getLocale(request)`).
+
+* If the first segment is one of the `supportedLocales`, that locale from the URL becomes the `Locale` of the request.
+* If it is missing or not supported, the request is redirected to the same path prefixed with the `defaultLocale`
+  (or to `defaultRequestURI` if no path remains). The `Locale` of the request is then the `defaultLocale`.
+
+| RequestURI              | Redirect to                    | `Locale`               |
+|-------------------------|--------------------------------|------------------------|
+| `/en/some/path.html`    | -                              | `en`                   |
+| `/en-us/some/path.html` | -                              | `en-US`                |
+| `/de/some/path.html`    | -                              | `de`                   |
+| `/fr/some/path.html`    | `/en/some/path.html`           | `en` (`defaultLocale`) |
+| `/some/path.html`       | `/en/path.html`                | `en` (`defaultLocale`) |
+| `/`                     | `/en` (or `defaultRequestURI`) | `en` (`defaultLocale`) |
+
+The examples assume `supportedLocales` are `en`, `en-US` and `de`, and `defaultLocale` is `en`.
 
 ## Dependency
 

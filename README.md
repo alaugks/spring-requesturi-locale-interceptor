@@ -1,7 +1,7 @@
 # RequestURI Locale Interceptor for Spring
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=alaugks_spring-requesturi-locale-interceptor&metric=alert_status)](https://sonarcloud.io/summary/overall?id=alaugks_spring-requesturi-locale-interceptor)
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.alaugks/spring-requesturi-locale-interceptor.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.alaugks/spring-requesturi-locale-interceptor/0.3.1)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.alaugks/spring-requesturi-locale-interceptor.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.alaugks/spring-requesturi-locale-interceptor/1.0.0)
 
 Handling Locale as first part of [RequestURI](https://jakarta.ee/specifications/servlet/6.0/apidocs/jakarta.servlet/jakarta/servlet/http/httpservletrequest#getRequestURI()). 
 
@@ -41,14 +41,14 @@ The examples assume `supportedLocales` are `en`, `en-US` and `de`, and `defaultL
 <dependency>
     <groupId>io.github.alaugks</groupId>
     <artifactId>spring-requesturi-locale-interceptor</artifactId>
-    <version>0.3.1</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```
-implementation group: 'io.github.alaugks', name: 'spring-requesturi-locale-interceptor', version: '0.3.1'
+implementation group: 'io.github.alaugks', name: 'spring-requesturi-locale-interceptor', version: '1.0.0'
 ```
 
 ## Configuration

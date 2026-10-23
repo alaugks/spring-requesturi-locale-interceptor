@@ -6,6 +6,7 @@ package io.github.alaugks.spring.requesturilocaleinterceptor;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Locale;
+import org.jspecify.annotations.Nullable;
 import org.springframework.context.i18n.SimpleLocaleContext;
 import org.springframework.web.servlet.i18n.AbstractLocaleResolver;
 
@@ -29,12 +30,16 @@ public class RequestURILocaleResolver extends AbstractLocaleResolver {
      * @param request the current HTTP request.
      * @return the locale previously set via
      *         {@link #setLocale(HttpServletRequest, HttpServletResponse, Locale)},
-     *         the request's {@code Accept-Language} locale, or the
-     *         configured default locale.
+     *         the request's {@code Accept-Language} locale (or the server's
+     *         default locale if the header is missing), or, as a defensive
+     *         fallback, the configured default locale.
      */
     @Override
     public Locale resolveLocale(HttpServletRequest request) {
-        Object localAttribute = this.request.getAttribute(LOCALE_ATTRIBUTE);
+        Object localAttribute = request.getAttribute(LOCALE_ATTRIBUTE);
+        if (localAttribute == null && this.request != null) {
+            localAttribute = this.request.getAttribute(LOCALE_ATTRIBUTE);
+        }
         if (localAttribute != null) {
             return (Locale) localAttribute;
         }
@@ -43,11 +48,11 @@ public class RequestURILocaleResolver extends AbstractLocaleResolver {
             return request.getLocale();
         }
 
-        // Theoretically reachable only: per Servlet spec HttpServletRequest#getLocale()
-        // never returns null — it returns the server's default Locale when the request
-        // has no Accept-Language header. Additionally, a properly configured
-        // RequestURILocaleResolver has setDefaultLocale(...) set.
-        return this.getDefaultLocale();
+        // Defensive fallback: per Servlet spec HttpServletRequest#getLocale() never returns null
+        // (it falls back to the server's default locale), so this is not expected to be reached.
+        // getDefaultLocale() is @Nullable in AbstractLocaleResolver, hence the final JVM fallback.
+        Locale defaultLocale = this.getDefaultLocale();
+        return defaultLocale != null ? defaultLocale : Locale.getDefault();
     }
 
     /**
@@ -60,8 +65,8 @@ public class RequestURILocaleResolver extends AbstractLocaleResolver {
      */
     @Override
     public void setLocale(HttpServletRequest request,
-        HttpServletResponse response,
-        Locale locale
+        @Nullable HttpServletResponse response,
+        @Nullable Locale locale
     ) {
         request.setAttribute(LOCALE_ATTRIBUTE, new SimpleLocaleContext(locale).getLocale());
         this.request = request;

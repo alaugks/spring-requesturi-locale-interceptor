@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import org.jspecify.annotations.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.LocaleResolver;
@@ -35,7 +36,7 @@ public class RequestURILocaleInterceptor implements HandlerInterceptor {
     private static final String PATH_DELIMITER = "/";
     private final Locale defaultLocale;
     private final List<Locale> supportedLocales;
-    private String defaultHomePath;
+    private final String defaultHomePath;
 
     /**
      * Creates a new interceptor from the values configured on the given
@@ -46,7 +47,9 @@ public class RequestURILocaleInterceptor implements HandlerInterceptor {
     public RequestURILocaleInterceptor(Builder builder) {
         this.defaultLocale = builder.defaultLocale;
         this.supportedLocales = builder.supportedLocales;
-        this.defaultHomePath = builder.defaultRequestURI;
+        this.defaultHomePath = builder.defaultRequestURI != null
+            ? builder.defaultRequestURI
+            : PATH_DELIMITER + this.formatLocale(this.defaultLocale);
     }
 
     /**
@@ -69,8 +72,8 @@ public class RequestURILocaleInterceptor implements HandlerInterceptor {
     public static final class Builder {
 
         private final Locale defaultLocale;
-        private List<Locale> supportedLocales;
-        private String defaultRequestURI;
+        private List<Locale> supportedLocales = new ArrayList<>();
+        private @Nullable String defaultRequestURI;
 
         /**
          * Creates a new builder with the given default locale.
@@ -93,8 +96,8 @@ public class RequestURILocaleInterceptor implements HandlerInterceptor {
          *                         empty list is assumed at {@link #build()}.
          * @return this builder for chaining.
          */
-        public Builder supportedLocales(List<Locale> supportedLocales) {
-            this.supportedLocales = supportedLocales;
+        public Builder supportedLocales(@Nullable List<Locale> supportedLocales) {
+            this.supportedLocales = supportedLocales != null ? supportedLocales : new ArrayList<>();
             return this;
         }
 
@@ -124,10 +127,6 @@ public class RequestURILocaleInterceptor implements HandlerInterceptor {
             Assert.notNull(defaultLocale, "Default locale is null");
             Assert.isTrue(!defaultLocale.toString().trim().isEmpty(), "Default locale is empty");
 
-            if (this.supportedLocales == null) {
-                this.supportedLocales = new ArrayList<>();
-            }
-
             return new RequestURILocaleInterceptor(this);
         }
     }
@@ -155,10 +154,6 @@ public class RequestURILocaleInterceptor implements HandlerInterceptor {
             LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
             if (localeResolver == null) {
                 throw new IllegalStateException("LocaleResolver not found");
-            }
-
-            if (this.defaultHomePath == null) {
-                this.defaultHomePath = PATH_DELIMITER + this.formatLocale(this.defaultLocale);
             }
 
             // Remove Leading Slash

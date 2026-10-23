@@ -8,30 +8,43 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Setup Java
-        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
         with:
           distribution: 'temurin'
           java-package: 'jdk'
           java-version: '17'
           check-latest: true
           server-id: 'central'
-          server-username: 'CENTRAL_USERNAME'
-          server-password: 'CENTRAL_TOKEN'
+          server-username-env-var: 'CENTRAL_USERNAME'
+          server-password-env-var: 'CENTRAL_PASSWORD'
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
-          gpg-passphrase: 'GPG_PRIVATE_KEY_PASSPHRASE'
+          gpg-passphrase-env-var: 'MAVEN_GPG_PASSPHRASE'
           cache: 'maven'
 
-      - name: Run Tests
+      # Pinned: with Maven 3.10.0 (runner default) Central rejected the bundle with
+      # "Bundle has content that does NOT have a .pom file"; 3.9.12 builds a valid bundle locally
+      - name: Setup Maven 3.9.12
         run: |
-          mvn test
+          curl -fsSLo "$RUNNER_TEMP/maven.tar.gz" https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.12/apache-maven-3.9.12-bin.tar.gz
+          echo "0a1be79f02466533fc1a80abbef8796e4f737c46c6574ede5658b110899942a94db634477dfd3745501c80aef9aac0d4f841d38574373f7e2d24cce89d694f70  $RUNNER_TEMP/maven.tar.gz" | sha512sum -c -
+          tar -xzf "$RUNNER_TEMP/maven.tar.gz" -C "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/apache-maven-3.9.12/bin" >> "$GITHUB_PATH"
+
+      - name: Maven version
+        run: |
+          mvn -v
+
+      - name: Test and check coverage
+        run: |
+          mvn verify -P test-coverage
 
       - name: Build & Deploy
         run: |
-          mvn -U -B clean deploy -P release
+          mvn -U -B -Daether.connector.http.preemptiveAuth=true -Dmaven.repository.credentialScope=id clean deploy -P release
         env:
-          GPG_PRIVATE_KEY_PASSPHRASE: ${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}
           CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
-          CENTRAL_TOKEN: ${{ secrets.CENTRAL_TOKEN }}
+          CENTRAL_PASSWORD: ${{ secrets.CENTRAL_TOKEN }}

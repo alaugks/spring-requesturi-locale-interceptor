@@ -3,15 +3,14 @@
 
 package io.github.alaugks.spring.requesturilocaleinterceptor;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import io.github.alaugks.spring.requesturilocaleinterceptor.mocks.MockHttpServletRequest;
 import java.util.Locale;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletResponse;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class RequestURIResolverTest {
 
@@ -40,7 +39,7 @@ class RequestURIResolverTest {
     @Test
     void test_resolveLocale_withEmptyRequestLocale() {
         String userLanguage = System.getProperty("user.language");
-        this.localResolver.setLocale(new MockHttpServletRequest(), this.mockResponse, null);
+        this.localResolver.setLocale(this.mockRequest, this.mockResponse, null);
 
         assertEquals(userLanguage, this.localResolver.resolveLocale(this.mockRequest).toString());
     }
@@ -48,7 +47,7 @@ class RequestURIResolverTest {
     @Test
     void test_resolveLocale_withLocale() {
         Locale locale = Locale.forLanguageTag("en-UK");
-        this.localResolver.setLocale(new MockHttpServletRequest(), this.mockResponse, locale);
+        this.localResolver.setLocale(this.mockRequest, this.mockResponse, locale);
 
         assertEquals("en_UK", this.localResolver.resolveLocale(this.mockRequest).toString());
     }

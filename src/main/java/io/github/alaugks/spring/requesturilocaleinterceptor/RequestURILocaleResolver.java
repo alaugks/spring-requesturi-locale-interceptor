@@ -22,7 +22,6 @@ import org.springframework.web.servlet.i18n.AbstractLocaleResolver;
 public class RequestURILocaleResolver extends AbstractLocaleResolver {
 
     static final String LOCALE_ATTRIBUTE = RequestURILocaleResolver.class.getName() + ".LOCALE";
-    private HttpServletRequest request;
 
     /**
      * Resolves the locale for the current request.
@@ -37,9 +36,6 @@ public class RequestURILocaleResolver extends AbstractLocaleResolver {
     @Override
     public Locale resolveLocale(HttpServletRequest request) {
         Object localAttribute = request.getAttribute(LOCALE_ATTRIBUTE);
-        if (localAttribute == null && this.request != null) {
-            localAttribute = this.request.getAttribute(LOCALE_ATTRIBUTE);
-        }
         if (localAttribute != null) {
             return (Locale) localAttribute;
         }
@@ -64,11 +60,11 @@ public class RequestURILocaleResolver extends AbstractLocaleResolver {
      * @param locale   the locale to remember for this request.
      */
     @Override
-    public void setLocale(HttpServletRequest request,
+    public void setLocale(
+        HttpServletRequest request,
         @Nullable HttpServletResponse response,
         @Nullable Locale locale
     ) {
         request.setAttribute(LOCALE_ATTRIBUTE, new SimpleLocaleContext(locale).getLocale());
-        this.request = request;
     }
 }

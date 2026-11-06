@@ -61,6 +61,18 @@ class RequestURILocaleInterceptorBuilderTest {
     }
 
     @Test
+    void test_supportedLocales_null() {
+        this.mockRequest.setRequestURI("/it");
+        RequestURILocaleInterceptor interceptor = RequestURILocaleInterceptor
+            .builder(defaultLocal)
+            .supportedLocales(null)
+            .build();
+        interceptor.preHandle(this.mockRequest, this.mockedResponse, null);
+
+        assertEquals("/en", this.mockedResponse.getRedirectedUrl());
+    }
+
+    @Test
     void test_defaultLocale_isEmpty() {
         assertThrows(Exception.class, () -> {
             this.mockRequest.setRequestURI("/it");

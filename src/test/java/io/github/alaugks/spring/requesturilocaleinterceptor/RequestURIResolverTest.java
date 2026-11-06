@@ -6,6 +6,7 @@ package io.github.alaugks.spring.requesturilocaleinterceptor;
 import java.util.Locale;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,25 +16,32 @@ import static org.mockito.Mockito.when;
 class RequestURIResolverTest {
 
     private RequestURILocaleResolver localResolver;
-    private org.springframework.mock.web.MockHttpServletRequest mockRequest;
+    private MockHttpServletRequest mockRequest;
     private MockHttpServletResponse mockResponse;
 
     @BeforeEach
     void beforeEach() {
         this.localResolver = new RequestURILocaleResolver();
-        this.mockRequest = new org.springframework.mock.web.MockHttpServletRequest();
+        this.mockRequest = new MockHttpServletRequest();
         this.mockResponse = new MockHttpServletResponse();
     }
 
     @Test
     void test_resolveLocale_defaultLocale() {
-        org.springframework.mock.web.MockHttpServletRequest mockHttpServletRequest = mock(
-            org.springframework.mock.web.MockHttpServletRequest.class);
+        MockHttpServletRequest mockHttpServletRequest = mock(MockHttpServletRequest.class);
         when(mockHttpServletRequest.getLocale()).thenReturn(null);
         this.localResolver.setDefaultLocale(Locale.forLanguageTag("de"));
         this.localResolver.setLocale(mockHttpServletRequest, this.mockResponse, null);
 
         assertEquals("de", this.localResolver.resolveLocale(mockHttpServletRequest).toString());
+    }
+
+    @Test
+    void test_resolveLocale_noRequestLocaleAndNoDefaultLocale() {
+        MockHttpServletRequest mockHttpServletRequest = mock(MockHttpServletRequest.class);
+        when(mockHttpServletRequest.getLocale()).thenReturn(null);
+
+        assertEquals(Locale.getDefault(), this.localResolver.resolveLocale(mockHttpServletRequest));
     }
 
     @Test

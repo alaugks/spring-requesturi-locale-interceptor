@@ -200,10 +200,10 @@ public class RequestURILocaleInterceptor implements HandlerInterceptor {
             Arrays.copyOfRange(uri, 1, uri.length)
         );
 
-        String path = !joinedUri.isEmpty() ? PATH_DELIMITER + joinedUri : "";
-        return !path.isEmpty()
-            ? PATH_DELIMITER + this.formatLocale(this.defaultLocale) + path + trailingSlash
-            : String.format(this.defaultHomePath, this.formatLocale(this.defaultLocale));
+        String path = joinedUri.isEmpty() ? "" : PATH_DELIMITER + joinedUri;
+        return path.isEmpty()
+            ? String.format(this.defaultHomePath, this.formatLocale(this.defaultLocale))
+            : PATH_DELIMITER + this.formatLocale(this.defaultLocale) + path + trailingSlash;
     }
 
     private String formatLocale(Locale locale) {
